@@ -1,0 +1,36 @@
+# Development Dockerfile with hot-reloading support
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_VERSION=1.8.0 \
+    POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1
+
+# Install system dependencies and Poetry
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    build-essential \
+    git && \
+    curl -sSL https://install.python-poetry.org | python3 - && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files
+COPY pyproject.toml poetry.lock* ./
+
+# Install all dependencies including dev
+RUN poetry install --with dev
+
+# Copy application code (will be overridden by volume mount in development)
+COPY . .
+
+# Run the application with hot-reloading
+CMD ["poetry", "run", "python", "-m", "app.main"]

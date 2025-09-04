@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  holmes-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: holmes-slack-bot
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./poetry.lock:/app/poetry.lock
+    ports:
+      - "4241:3000"
+    restart: unless-stopped
+    networks:
+      - holmes-network
+
+  # Production build (commented out by default)
+  # holmes-bot-prod:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: holmes-slack-bot-prod
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - "3000:3000"
+  #   restart: unless-stopped
+  #   networks:
+  #     - holmes-network
+
+networks:
+  holmes-network:
+    driver: bridge
