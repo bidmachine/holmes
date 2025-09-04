@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "holmes-slack-bot"
+version = "0.1.0"
+description = "HOLMES - Slack bot for security monitoring and analysis"
+authors = ["Your Name <your.email@example.com>"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+slack-bolt = "^1.18.0"
+slack-sdk = "^3.26.0"
+python-dotenv = "^1.0.0"
+aiohttp = "^3.9.0"
+flask = "^3.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.0"
+black = "^23.7.0"
+flake8 = "^6.1.0"
+mypy = "^1.5.0"
+pytest-cov = "^4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
